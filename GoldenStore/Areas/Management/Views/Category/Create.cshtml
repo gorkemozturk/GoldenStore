@@ -1,0 +1,94 @@
+﻿@model GoldenStore.Models.ViewModels.CategoryViewModel
+@using GoldenStore.Extensions
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")"><a asp-action="Index" asp-controller="Category">Categories</a></li>
+            </ul>
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Categories</h3>
+                <ul class="breadcrumb-tree">
+                    <li><a href="#">Home</a></li>
+                    <li class="active"><a asp-action="Index">Categories</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="order-details">
+                    <form method="post" asp-action="Create">
+                        <div class="section-title">
+                            <h3 class="title">Create a New Category</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Category.Name"></label>
+                            <input class="input" type="text" asp-for="Category.Name" autocomplete="off">
+                            <span asp-validation-for="Category.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Category.ParentId"></label> <br />
+                            <select asp-for="Category.ParentId" asp-items="Model.Categories.ToSeceltListItem(Model.Category.Id)" class="input-select">
+                                <option value="">Main Category</option>
+                            </select>
+                            <span asp-validation-for="Category.ParentId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Category.DisplayOrder"></label>
+                            <input class="input" type="text" asp-for="Category.DisplayOrder" autocomplete="off">
+                            <span asp-validation-for="Category.DisplayOrder" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Category.IsActive"></label> <br />
+                            <input type="checkbox" asp-for="Category.IsActive">
+                            <span asp-validation-for="Category.IsActive" class="text-danger"></span>
+                        </div>
+                        <a asp-action="Index" style="background: #8D99AE" class="primary-btn"><i class="fa fa-angle-left"></i> Back to List</a>
+                        <button type="submit" class="primary-btn"><i class="fa fa-plus-circle"></i> Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+
+@section Scripts
+    {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

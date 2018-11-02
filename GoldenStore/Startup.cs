@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using GoldenStore.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using GoldenStore.Interfaces;
+using GoldenStore.Repositories;
 
 namespace GoldenStore
 {
@@ -41,6 +43,8 @@ namespace GoldenStore
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,8 +70,9 @@ namespace GoldenStore
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                  name: "areas",
+                  template: "{area=}/{controller=Home}/{action=Index}/{id?}"
+                );
             });
         }
     }
