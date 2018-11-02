@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<GoldenStore.Models.Product>
+@{
     ViewData["Title"] = "Products";
 }
 
@@ -43,9 +44,49 @@
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
-                <a class="primary-btn pull-right"><i class="fa fa-plus-circle"></i> Create a New Category</a>
+                <a asp-action="Create" class="primary-btn pull-right"><i class="fa fa-plus-circle"></i> Create a New Product</a>
 
                 <div class="clearfix"></div> <br />
+                @if (Model.Count() > 0)
+                {
+                    <table style="margin: 0" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">@Html.DisplayNameFor(m => m.Id)</th>
+                                <th class="text-center">@Html.DisplayNameFor(m => m.Image)</th>
+                                <th>@Html.DisplayNameFor(m => m.Category.Name)</th>
+                                <th>@Html.DisplayNameFor(m => m.Name)</th>
+                                <th>@Html.DisplayNameFor(m => m.Price)</th>
+                                <th class="text-center">@Html.DisplayNameFor(m => m.IsActive)</th>
+                                <th class="text-center">@Html.DisplayNameFor(m => m.CreatedAt)</th>
+                                <th class="text-center">@Html.DisplayNameFor(m => m.UpdatedAt)</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.Id)</td>
+                                    <td class="text-center" style="vertical-align: middle"><img style="width: 32px" alt="@item.Name" src="@item.Image" /></td>
+                                    <td style="vertical-align: middle">@Html.DisplayFor(m => item.Category.Name)</td>
+                                    <td style="vertical-align: middle">@Html.DisplayFor(m => item.Name)</td>
+                                    <td style="vertical-align: middle">@Html.DisplayFor(m => item.Price)</td>
+                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.IsActive)</td>
+                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.CreatedAt)</td>
+                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.UpdatedAt)</td>
+                                    <td class="text-center"><partial name="_TableButtonsPartial" model="item.Id" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div style="margin: 0" class="alert alert-info" role="alert">
+                        There is no any value to show here.
+                    </div>
+                }
 
             </div>
         </div>

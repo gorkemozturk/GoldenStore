@@ -21,6 +21,7 @@ namespace GoldenStore.Models
         public string Image { get; set; }
 
         [Required]
+        [Range(0, int.MaxValue)]
         public decimal Price { get; set; }
 
         [Required]

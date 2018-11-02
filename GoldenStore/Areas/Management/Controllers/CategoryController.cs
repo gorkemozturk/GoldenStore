@@ -25,17 +25,20 @@ namespace GoldenStore.Areas.Management.Controllers
             };
         }
 
+        // GET: Management/Category
         public IActionResult Index()
         {
             var categories = _category.List();
             return View(categories);
         }
 
+        // GET: Management/Category/Create
         public IActionResult Create()
         {
             return View(CategoryViewModel);
         }
 
+        // POST: Management/Category/Create/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
@@ -54,6 +57,7 @@ namespace GoldenStore.Areas.Management.Controllers
             return View(category);
         }
 
+        // GET: Management/Category/Update/5
         public IActionResult Update(int? id)
         {
             if (id == null) return NotFound();
@@ -64,6 +68,7 @@ namespace GoldenStore.Areas.Management.Controllers
             return View(CategoryViewModel);
         }
 
+        // POST: Management/Category/Update/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id, Category category)
@@ -87,6 +92,7 @@ namespace GoldenStore.Areas.Management.Controllers
             return View(CategoryViewModel);
         }
 
+        // GET: Management/Category/Show/5
         public IActionResult Show(int? id)
         {
             if (id == null) return NotFound();
@@ -97,6 +103,7 @@ namespace GoldenStore.Areas.Management.Controllers
             return View(CategoryViewModel);
         }
 
+        // GET: Management/Category/Delete/5
         public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -107,6 +114,7 @@ namespace GoldenStore.Areas.Management.Controllers
             return View(CategoryViewModel);
         }
 
+        // POST: Management/Category/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
