@@ -7,23 +7,21 @@ using System.Threading.Tasks;
 
 namespace GoldenStore.Models
 {
-    public class Category
+    public class Product
     {
-        [Key]
-        [Display(Name = "ID")]
         public int Id { get; set; }
 
-        [Display(Name = "Parent Category")]
-        public int? ParentId { get; set; }
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
 
         [Required]
-        [Display(Name = "Category Name")]
         public string Name { get; set; }
 
+        public string Description { get; set; }
+        public string Image { get; set; }
+
         [Required]
-        [Range(0, int.MaxValue)]
-        [Display(Name = "Display Order")]
-        public int DisplayOrder { get; set; }
+        public decimal Price { get; set; }
 
         [Required]
         [Display(Name = "Active")]
@@ -35,7 +33,7 @@ namespace GoldenStore.Models
         [Display(Name = "Updated At")]
         public DateTime UpdatedAt { get; set; }
 
-        [ForeignKey("ParentId")]
-        public virtual Category Parent { get; set; }
+        [ForeignKey("CategoryId")]
+        public virtual Category Category { get; set; }
     }
 }

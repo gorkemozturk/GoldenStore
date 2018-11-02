@@ -11,9 +11,7 @@
         <!-- responsive-nav -->
         <div id="responsive-nav">
             <!-- NAV -->
-            <ul class="main-nav nav navbar-nav">
-                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")"><a asp-action="Index" asp-controller="Category">Categories</a></li>
-            </ul>
+            <partial name="_ManagementMenuPartial" />
             <!-- /NAV -->
         </div>
         <!-- /responsive-nav -->

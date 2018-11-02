@@ -1,0 +1,4 @@
+﻿<ul class="main-nav nav navbar-nav">
+    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Category" ? "active" : "")"><a asp-action="Index" asp-area="Management" asp-controller="Category">Categories</a></li>
+    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Product" ? "active" : "")"><a asp-action="Index" asp-area="Management" asp-controller="Product">Products</a></li>
+</ul>

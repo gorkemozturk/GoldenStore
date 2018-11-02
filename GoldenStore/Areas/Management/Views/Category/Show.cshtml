@@ -11,9 +11,7 @@
         <!-- responsive-nav -->
         <div id="responsive-nav">
             <!-- NAV -->
-            <ul class="main-nav nav navbar-nav">
-                <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")"><a asp-action="Index" asp-controller="Category">Categories</a></li>
-            </ul>
+            <partial name="_ManagementMenuPartial" />
             <!-- /NAV -->
         </div>
         <!-- /responsive-nav -->
@@ -69,7 +67,7 @@
                         <input type="checkbox" asp-for="Category.IsActive" disabled>
                     </div>
                     <a asp-action="Index" style="background: #8D99AE" class="primary-btn"><i class="fa fa-angle-left"></i> Back to List</a>
-                    <a asp-route-id="@Model.Category.Id" asp-action="Update" class="primary-btn"><i class="fa fa-edit"></i> Update</a>
+                    <a asp-route-id="@Model.Category.Id" asp-action="Update" class="primary-btn"><i class="fa fa-edit"></i> Go to Update</a>
                 </div>
             </div>
         </div>
