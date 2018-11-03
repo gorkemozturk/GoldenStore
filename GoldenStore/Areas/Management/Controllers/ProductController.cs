@@ -106,15 +106,13 @@ namespace GoldenStore.Areas.Management.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id)
         {
-            if (id != ProductViewModel.Product.Id) return NotFound();
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     string webRootPath = _hostingEnvironment.WebRootPath;
                     var files = HttpContext.Request.Form.Files;
-                    var product = _product.Find(ProductViewModel.Product.Id);
+                    var product = _product.Find(id);
 
                     if (files.Count != 0)
                     {

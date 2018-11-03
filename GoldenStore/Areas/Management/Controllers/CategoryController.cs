@@ -73,9 +73,7 @@ namespace GoldenStore.Areas.Management.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id)
         {
-            if (id != CategoryViewModel.Category.Id) return NotFound();
-
-            var category = _category.Find(CategoryViewModel.Category.Id);
+            var category = _category.Find(id);
 
             if (ModelState.IsValid)
             {
