@@ -95,7 +95,7 @@ namespace GoldenStore.Areas.Management.Controllers
         {
             if (id == null) return NotFound();
 
-            ProductViewModel.Product = _product.FindWithCategory(id);
+            ProductViewModel.Product = _product.Find(id);
             if (ProductViewModel.Product == null) return NotFound();
 
             return View(ProductViewModel);
@@ -161,7 +161,7 @@ namespace GoldenStore.Areas.Management.Controllers
         {
             if (id == null) return NotFound();
 
-            ProductViewModel.Product = _product.FindWithCategory(id);
+            ProductViewModel.Product = _product.Find(id);
             if (ProductViewModel.Product == null) return NotFound();
 
             return View(ProductViewModel);
@@ -172,7 +172,7 @@ namespace GoldenStore.Areas.Management.Controllers
         {
             if (id == null) return NotFound();
 
-            ProductViewModel.Product = _product.FindWithCategory(id);
+            ProductViewModel.Product = _product.Find(id);
             if (ProductViewModel.Product == null) return NotFound();
 
             return View(ProductViewModel);

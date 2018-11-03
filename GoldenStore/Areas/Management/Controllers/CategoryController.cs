@@ -62,7 +62,7 @@ namespace GoldenStore.Areas.Management.Controllers
         {
             if (id == null) return NotFound();
 
-            CategoryViewModel.Category = _category.FindWithParent(id);
+            CategoryViewModel.Category = _category.Find(id);
             if (CategoryViewModel.Category == null) return NotFound();
 
             return View(CategoryViewModel);

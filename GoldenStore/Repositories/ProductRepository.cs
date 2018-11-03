@@ -13,11 +13,6 @@ namespace GoldenStore.Repositories
         {
         }
 
-        public Product FindWithCategory(int? id)
-        {
-            return _context.Set<Product>().Include(c => c.Category).SingleOrDefault(p => p.Id == id);
-        }
-
         public IEnumerable<Product> ListWithCategories()
         {
             return _context.Set<Product>().Include(c => c.Category);
