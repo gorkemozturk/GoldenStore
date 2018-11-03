@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GoldenStore.Data;
 using GoldenStore.Interfaces;
 using GoldenStore.Models;
@@ -10,6 +11,11 @@ namespace GoldenStore.Repositories
     {
         public ProductRepository(ApplicationDbContext context) : base(context)
         {
+        }
+
+        public Product FindWithCategory(int? id)
+        {
+            return _context.Set<Product>().Include(c => c.Category).SingleOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<Product> ListWithCategories()

@@ -62,8 +62,8 @@ namespace GoldenStore.Areas.Management.Controllers
         {
             if (id == null) return NotFound();
 
-            CategoryViewModel.Category = _category.Find(id);
-            if (CategoryViewModel == null) return NotFound();
+            CategoryViewModel.Category = _category.FindWithParent(id);
+            if (CategoryViewModel.Category == null) return NotFound();
 
             return View(CategoryViewModel);
         }
@@ -71,10 +71,11 @@ namespace GoldenStore.Areas.Management.Controllers
         // POST: Management/Category/Update/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id, Category category)
+        public IActionResult Update(int id)
         {
-            category = _category.Find(id);
-            if (id != category.Id) return NotFound();
+            if (id != CategoryViewModel.Category.Id) return NotFound();
+
+            var category = _category.Find(CategoryViewModel.Category.Id);
 
             if (ModelState.IsValid)
             {

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GoldenStore.Interfaces;
+using GoldenStore.Models;
 using GoldenStore.Models.ViewModels;
 using GoldenStore.Utilities;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ namespace GoldenStore.Areas.Management.Controllers
             ProductViewModel = new ProductViewModel()
             {
                 Categories = _category.List(),
-                Product = new Models.Product()
+                Product = new Product()
             };
         }
 
@@ -86,6 +87,118 @@ namespace GoldenStore.Areas.Management.Controllers
             }
 
             _product.Save();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Management/Product/Update/5
+        public IActionResult Update(int? id)
+        {
+            if (id == null) return NotFound();
+
+            ProductViewModel.Product = _product.FindWithCategory(id);
+            if (ProductViewModel.Product == null) return NotFound();
+
+            return View(ProductViewModel);
+        }
+
+        // POST: Management/Product/Update/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(int id)
+        {
+            if (id != ProductViewModel.Product.Id) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string webRootPath = _hostingEnvironment.WebRootPath;
+                    var files = HttpContext.Request.Form.Files;
+                    var product = _product.Find(ProductViewModel.Product.Id);
+
+                    if (files.Count != 0)
+                    {
+                        // If image or images exist(s)
+                        var upload = Path.Combine(webRootPath, "images/product");
+                        var newExtension = files[0].FileName.Substring(files[0].FileName.LastIndexOf("."), files[0].FileName.Length - files[0].FileName.LastIndexOf("."));
+                        var oldExtension = product.Image.Substring(product.Image.LastIndexOf("."), product.Image.Length - product.Image.LastIndexOf("."));
+
+                        if (System.IO.File.Exists(Path.Combine(upload, ProductViewModel.Product.Id + oldExtension)))
+                        {
+                            System.IO.File.Delete(Path.Combine(upload, ProductViewModel.Product.Id + oldExtension));
+                        }
+
+                        using (var fileStream = new FileStream(Path.Combine(upload, ProductViewModel.Product.Id + newExtension), FileMode.Create))
+                        {
+                            files[0].CopyTo(fileStream);
+                        }
+
+                        ProductViewModel.Product.Image = @"\images\product\" + ProductViewModel.Product.Id + oldExtension;
+                    }
+                    
+                    if (ProductViewModel.Product.Image != null)
+                    {
+                        product.Image = ProductViewModel.Product.Image;
+                    }
+
+                    product.Name = ProductViewModel.Product.Name;
+                    product.Description = ProductViewModel.Product.Description;
+                    product.Price = ProductViewModel.Product.Price;
+                    product.IsActive = ProductViewModel.Product.IsActive;
+                    product.CategoryId = ProductViewModel.Product.CategoryId;
+                    product.UpdatedAt = DateTime.Now;
+
+                    _product.Save();
+                }
+                catch(Exception e)
+                {
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(ProductViewModel);
+        }
+
+        // GET: Management/Product/Show/5
+        public IActionResult Show(int? id)
+        {
+            if (id == null) return NotFound();
+
+            ProductViewModel.Product = _product.FindWithCategory(id);
+            if (ProductViewModel.Product == null) return NotFound();
+
+            return View(ProductViewModel);
+        }
+
+        // GET: Management/Product/Delete/5
+        public IActionResult Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            ProductViewModel.Product = _product.FindWithCategory(id);
+            if (ProductViewModel.Product == null) return NotFound();
+
+            return View(ProductViewModel);
+        }
+
+        // POST: Management/Product/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            Product product = _product.Find(id);
+
+            if (product != null)
+            {
+                var upload = Path.Combine(webRootPath, "images/product");
+                var extension = product.Image.Substring(product.Image.LastIndexOf("."), product.Image.Length - product.Image.LastIndexOf("."));
+                var imagePath = Path.Combine(upload, product.Id + extension);
+
+                if (System.IO.File.Exists(imagePath)) System.IO.File.Delete(imagePath);
+
+                _product.Delete(product);
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }
