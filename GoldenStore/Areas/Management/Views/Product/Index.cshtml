@@ -58,8 +58,8 @@
                                 <th>@Html.DisplayNameFor(m => m.Name)</th>
                                 <th>@Html.DisplayNameFor(m => m.Price)</th>
                                 <th class="text-center">@Html.DisplayNameFor(m => m.IsActive)</th>
-                                <th class="text-center">@Html.DisplayNameFor(m => m.CreatedAt)</th>
-                                <th class="text-center">@Html.DisplayNameFor(m => m.UpdatedAt)</th>
+                                <th>@Html.DisplayNameFor(m => m.CreatedAt)</th>
+                                <th>@Html.DisplayNameFor(m => m.UpdatedAt)</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -73,8 +73,8 @@
                                     <td style="vertical-align: middle">@Html.DisplayFor(m => item.Name)</td>
                                     <td style="vertical-align: middle">@Html.DisplayFor(m => item.Price)</td>
                                     <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.IsActive)</td>
-                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.CreatedAt)</td>
-                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.UpdatedAt)</td>
+                                    <td style="vertical-align: middle">@Html.DisplayFor(m => item.CreatedAt)</td>
+                                    <td style="vertical-align: middle">@Html.DisplayFor(m => item.UpdatedAt)</td>
                                     <td class="text-center"><partial name="_TableButtonsPartial" model="item.Id" /></td>
                                 </tr>
                             }

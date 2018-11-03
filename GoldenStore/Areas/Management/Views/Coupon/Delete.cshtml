@@ -1,0 +1,84 @@
+﻿@model GoldenStore.Models.Coupon
+@{
+    ViewData["Title"] = "Delete the Coupon";
+}
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <partial name="_ManagementMenuPartial" />
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Coupons</h3>
+                <ul class="breadcrumb-tree">
+                    <li><a href="#">Home</a></li>
+                    <li class="active"><a asp-action="Index">Coupons</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="order-details">
+                    <form method="post" asp-action="Delete">
+                        <div class="section-title">
+                            <h3 class="title">Delete the Coupon</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Name"></label>
+                            <input class="input" type="text" asp-for="Name" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="CouponType"></label> <br />
+                            <select disabled asp-for="CouponType" asp-items="Html.GetEnumSelectList<Coupon.ECouponType>()" class="input-select">
+                                <option value="">Please Select</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="Discount"></label>
+                            <input class="input" type="text" asp-for="Discount" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="MinimumAmount"></label>
+                            <input class="input" type="text" asp-for="MinimumAmount" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" asp-for="IsActive"></label> <br />
+                            <input type="checkbox" asp-for="IsActive">
+                        </div>
+                        <a asp-action="Index" style="background: #8D99AE" class="primary-btn"><i class="fa fa-angle-left"></i> Back to List</a>
+                        <button asp-route-id="@Model.Id" type="submit" class="primary-btn"><i class="fa fa-trash"></i> Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->

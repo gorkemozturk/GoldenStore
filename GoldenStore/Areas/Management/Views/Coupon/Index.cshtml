@@ -1,6 +1,6 @@
-﻿@model IEnumerable<GoldenStore.Models.Category>
+﻿@model IEnumerable<GoldenStore.Models.Coupon>
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Coupons";
 }
 
 <!-- NAVIGATION -->
@@ -18,7 +18,6 @@
     <!-- /container -->
 </nav>
 <!-- /NAVIGATION -->
-
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
     <!-- container -->
@@ -26,10 +25,10 @@
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
-                <h3 class="breadcrumb-header">Categories</h3>
+                <h3 class="breadcrumb-header">Coupons</h3>
                 <ul class="breadcrumb-tree">
                     <li><a href="#">Home</a></li>
-                    <li class="active"><a asp-action="Index">Categories</a></li>
+                    <li class="active"><a asp-action="Index">Coupons</a></li>
                 </ul>
             </div>
         </div>
@@ -38,7 +37,6 @@
     <!-- /container -->
 </div>
 <!-- /BREADCRUMB -->
-
 <!-- SECTION -->
 <div class="section">
     <!-- container -->
@@ -46,7 +44,7 @@
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
-                <a asp-action="Create" class="primary-btn pull-right"><i class="fa fa-plus-circle"></i> Create a New Category</a>
+                <a asp-action="Create" class="primary-btn pull-right"><i class="fa fa-plus-circle"></i> Create a New Coupon</a>
 
                 <div class="clearfix"></div> <br />
                 @if (Model.Count() > 0)
@@ -55,9 +53,9 @@
                         <thead>
                             <tr>
                                 <th class="text-center">@Html.DisplayNameFor(m => m.Id)</th>
-                                <th>@Html.DisplayNameFor(m => m.ParentId)</th>
                                 <th>@Html.DisplayNameFor(m => m.Name)</th>
-                                <th class="text-center">@Html.DisplayNameFor(m => m.DisplayOrder)</th>
+                                <th class="text-center">@Html.DisplayNameFor(m => m.Discount)</th>
+                                <th>@Html.DisplayNameFor(m => m.MinimumAmount)</th>
                                 <th class="text-center">@Html.DisplayNameFor(m => m.IsActive)</th>
                                 <th>@Html.DisplayNameFor(m => m.CreatedAt)</th>
                                 <th>@Html.DisplayNameFor(m => m.UpdatedAt)</th>
@@ -69,13 +67,22 @@
                             {
                                 <tr>
                                     <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.Id)</td>
-                                    <td style="vertical-align: middle">@Html.DisplayFor(m => item.Parent.Name)</td>
                                     <td style="vertical-align: middle">@Html.DisplayFor(m => item.Name)</td>
-                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.DisplayOrder)</td>
+                                    <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.Discount)</td>
+                                    <td style="vertical-align: middle">@Html.DisplayFor(m => item.MinimumAmount)</td>
                                     <td class="text-center" style="vertical-align: middle">@Html.DisplayFor(m => item.IsActive)</td>
                                     <td style="vertical-align: middle">@Html.DisplayFor(m => item.CreatedAt)</td>
                                     <td style="vertical-align: middle">@Html.DisplayFor(m => item.UpdatedAt)</td>
-                                    <td class="text-center"><partial name="_TableButtonsPartial" model="item.Id" /></td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group" role="group">
+                                            <a class="btn btn-default" asp-action="Update" asp-route-id="@item.Id">
+                                                <span class="fa fa-edit"></span>
+                                            </a>
+                                            <a class="btn btn-default" asp-action="Delete" asp-route-id="@item.Id">
+                                                <span class="fa fa-trash-o"></span>
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -87,6 +94,7 @@
                         There is no any value to show here.
                     </div>
                 }
+
             </div>
         </div>
         <!-- /row -->
