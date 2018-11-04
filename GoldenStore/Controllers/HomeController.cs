@@ -5,33 +5,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GoldenStore.Models;
+using GoldenStore.Interfaces;
+using GoldenStore.Models.ViewModels;
 
 namespace GoldenStore.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IProductRepository _product;
+        private readonly ICategoryRepository _category;
+        private readonly ICouponRepository _coupon;
+
+        public HomeController(IProductRepository product, ICategoryRepository category, ICouponRepository coupon)
+        {
+            _product = product;
+            _category = category;
+            _coupon = coupon;
+        }
+
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            IndexViewModel indexViewModel = new IndexViewModel()
+            {
+                Products = _product.ListWithCategories(),
+                Categories = _category.ListParentCategories(),
+                Coupons = _coupon.List(),
+            };
+            return View(indexViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
