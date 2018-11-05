@@ -7,12 +7,14 @@ using GoldenStore.Interfaces;
 using GoldenStore.Models;
 using GoldenStore.Models.ViewModels;
 using GoldenStore.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoldenStore.Areas.Management.Controllers
 {
     [Area("Management")]
+    [Authorize(Roles = StaticDetails.Administrator)]
     public class ProductController : Controller
     {
         private readonly IProductRepository _product;

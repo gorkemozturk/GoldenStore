@@ -1,12 +1,15 @@
 ﻿using GoldenStore.Interfaces;
 using GoldenStore.Models;
 using GoldenStore.Models.ViewModels;
+using GoldenStore.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace GoldenStore.Areas.Management.Controllers
 {
     [Area("Management")]
+    [Authorize(Roles = StaticDetails.Administrator)]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _category;

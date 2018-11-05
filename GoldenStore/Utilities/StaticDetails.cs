@@ -8,5 +8,8 @@ namespace GoldenStore.Utilities
     public class StaticDetails
     {
         public const string DefaultImage = "default.png";
+
+        public const string Administrator = "Administrator";
+        public const string User = "User";
     }
 }

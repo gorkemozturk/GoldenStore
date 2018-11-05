@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using GoldenStore.Interfaces;
 using GoldenStore.Models;
+using GoldenStore.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoldenStore.Areas.Management.Controllers
 {
     [Area("Management")]
+    [Authorize(Roles = StaticDetails.Administrator)]
     public class CouponController : Controller
     {
         private readonly ICouponRepository _coupon;
