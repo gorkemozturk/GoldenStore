@@ -1,0 +1,188 @@
+﻿@model GoldenStore.Models.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a asp-action="Index" asp-controller="Home">Home</a></li>
+                    <li><a asp-action="Index" asp-controller="Cart">Shopping Cart</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <form method="post">
+                @if (Model.ShoppingCart.Count > 0)
+                {
+                    <div class="col-md-5">
+                        <div class="order-details">
+                            <div class="section-title text-center">
+                                <h3 class="title">Shopping Cart</h3>
+                            </div>
+                            <div class="order-summary">
+                                <div class="order-col">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-3">PRODUCT</th>
+                                                <th class="col-md-3">PRICE</th>
+                                                <th class="col-md-3 text-center">COUNT</th>
+                                                <th class="col-md-3 text-center">ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.ShoppingCart)
+                                            {
+                                                <tr>
+                                                    <td class="col-md-3">@item.Product.Name</td>
+                                                    <td class="col-md-3">@String.Format("{0:C}", item.Product.Price)</td>
+                                                    <td class="col-md-3 text-center">@item.Count</td>
+                                                    <td class="col-md-3 text-center">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="submit" asp-action="Increase" class="btn btn-default btn-xs" asp-route-id="@item.Id">
+                                                                <span class="fa fa-plus"></span>
+                                                            </button>
+                                                            <button type="submit" asp-action="Decrease" class="btn btn-default btn-xs" asp-route-id="@item.Id">
+                                                                <span class="fa fa-minus"></span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="order-products">
+
+                                </div>
+                                <div class="order-col">
+                                    <div>Shiping</div>
+                                    <div><strong>FREE</strong></div>
+                                </div>
+                                <div class="order-col">
+                                    <div><strong>TOTAL</strong></div>
+                                    <div><strong class="order-total">@String.Format("{0:C}", @Model.Order.Total)</strong></div>
+                                </div>
+                            </div>
+                            <div class="payment-method">
+                                <div class="input-radio">
+                                    <input type="radio" name="payment" id="payment-1">
+                                    <label for="payment-1">
+                                        <span></span>
+                                        Direct Bank Transfer
+                                    </label>
+                                    <div class="caption">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                </div>
+                                <div class="input-radio">
+                                    <input type="radio" name="payment" id="payment-2">
+                                    <label for="payment-2">
+                                        <span></span>
+                                        Cheque Payment
+                                    </label>
+                                    <div class="caption">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                </div>
+                                <div class="input-radio">
+                                    <input type="radio" name="payment" id="payment-3">
+                                    <label for="payment-3">
+                                        <span></span>
+                                        Paypal System
+                                    </label>
+                                    <div class="caption">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="terms">
+                                <label for="terms">
+                                    <span></span>
+                                    I've read and accept the <a href="#">terms & conditions</a>
+                                </label>
+                            </div>
+                            <a href="#" class="primary-btn order-submit">Place order</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info" role="alert">
+                        There are not any products in your shopping cart.
+                    </div>
+                }
+            </form>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="newsletter">
+                    <p>Sign Up for the <strong>NEWSLETTER</strong></p>
+                    <form>
+                        <input class="input" type="email" placeholder="Enter Your Email">
+                        <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+                    </form>
+                    <ul class="newsletter-follow">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /NEWSLETTER -->

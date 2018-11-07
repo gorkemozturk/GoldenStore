@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoldenStore.Interfaces
 {
-    public interface IShoppingCartRepository : IRepository<ShoppingCart>
+    public interface IOrderRepository : IRepository<Order>
     {
-        List<ShoppingCart> ListWithUser(string id);
     }
 }

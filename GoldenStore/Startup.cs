@@ -51,6 +51,8 @@ namespace GoldenStore
             services.AddTransient<ICouponRepository, CouponRepository>();
             services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
 
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(15);

@@ -13,5 +13,10 @@ namespace GoldenStore.Repositories
         public ShoppingCartRepository(ApplicationDbContext context) : base(context)
         {
         }
+
+        public List<ShoppingCart> ListWithUser(string id)
+        {
+            return _context.Set<ShoppingCart>().Where(c => c.ApplicationUserId == id).ToList();
+        }
     }
 }
