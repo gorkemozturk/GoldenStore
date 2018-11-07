@@ -4,14 +4,16 @@ using GoldenStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoldenStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181105111447_CreateShoppingCartsTable")]
+    partial class CreateShoppingCartsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,7 +110,8 @@ namespace GoldenStore.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired();
 
                     b.Property<int>("Count");
 
@@ -119,6 +122,10 @@ namespace GoldenStore.Data.Migrations
                     b.Property<DateTime>("UpdatedAt");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ShoppingCarts");
                 });
@@ -314,6 +321,19 @@ namespace GoldenStore.Data.Migrations
                     b.HasOne("GoldenStore.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("GoldenStore.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("GoldenStore.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GoldenStore.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

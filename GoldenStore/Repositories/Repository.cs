@@ -35,7 +35,7 @@ namespace GoldenStore.Repositories
 
         public T Find(Func<T, bool> predicate)
         {
-            return _context.Set<T>().Where(predicate).SingleOrDefault();
+            return _context.Set<T>().Where(predicate).FirstOrDefault();
         }
 
         public IEnumerable<T> List()
@@ -49,9 +49,19 @@ namespace GoldenStore.Repositories
             _context.SaveChanges();
         }
 
+        public void Add(T entity)
+        {
+            _context.Add(entity);
+        }
+
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public int Count(Func<T, bool> predicate)
+        {
+            return _context.Set<T>().Where(predicate).ToList().Count();
         }
     }
 }

@@ -49,6 +49,13 @@ namespace GoldenStore
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICouponRepository, CouponRepository>();
+            services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
+            services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
+
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.Cookie.HttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,12 +78,17 @@ namespace GoldenStore
 
             app.UseAuthentication();
 
+            app.UseSession();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                  name: "areas",
-                  template: "{area=}/{controller=Home}/{action=Index}/{id?}"
-                );
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    );
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

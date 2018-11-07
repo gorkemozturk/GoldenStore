@@ -11,6 +11,8 @@ namespace GoldenStore.Interfaces
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);
+        int Count(Func<T, bool> predicate);
+        void Add(T entity);
         void Save();
     }
 }

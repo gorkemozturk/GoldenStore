@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GoldenStore.Models;
 using GoldenStore.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -101,6 +102,7 @@ namespace GoldenStore.Areas.Identity.Pages.Account
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    HttpContext.Session.SetInt32("Counter", 0);
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

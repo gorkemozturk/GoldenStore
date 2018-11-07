@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using GoldenStore.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace GoldenStore.Areas.Identity.Pages.Account
 {
@@ -17,11 +19,15 @@ namespace GoldenStore.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IApplicationUserRepository _user;
+        private readonly IShoppingCartRepository _shoppingCart;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IApplicationUserRepository user, IShoppingCartRepository shoppingCart)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _user = user;
+            _shoppingCart = shoppingCart;
         }
 
         [BindProperty]
@@ -76,6 +82,9 @@ namespace GoldenStore.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    var user = _user.FindWithEmail(Input.Email);
+                    var counter = _shoppingCart.Count(c => c.ApplicationUserId == user.Id);
+                    HttpContext.Session.SetInt32("Counter", counter);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

@@ -93,10 +93,19 @@
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
-                                    <div class="qty">3</div>
+                                    @if (HttpContextAccessor.HttpContext.Session.GetInt32("Counter") != null)
+                                    {
+                                        <div class="qty">@HttpContextAccessor.HttpContext.Session.GetInt32("Counter")</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="qty">0</div>
+                                    }
+
                                 </a>
                                 <div class="cart-dropdown">
                                     <div class="cart-list">
+
                                         <div class="product-widget">
                                             <div class="product-img">
                                                 <img src="./img/product01.png" alt="">

@@ -12,7 +12,7 @@
         </div>
         <div class="product-body">
             <p class="product-category">@item.Category.Name</p>
-            <h3 class="product-name"><a href="#">@item.Name</a></h3>
+            <h3 class="product-name"><a asp-action="Show" asp-controller="Product" asp-route-id="@item.Id" asp-area="">@item.Name</a></h3>
             <h4 class="product-price">@String.Format("{0:C}", item.Price)</h4>
             <div class="product-rating">
                 <i class="fa fa-star"></i>
