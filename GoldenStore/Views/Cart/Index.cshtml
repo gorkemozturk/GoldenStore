@@ -41,10 +41,9 @@
     <div class="container">
         <!-- row -->
         <div class="row">
-            <form method="post">
-                @if (Model.ShoppingCart.Count > 0)
+                @if (Model.ShoppingCart != null)
                 {
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <div class="order-details">
                             <div class="section-title text-center">
                                 <h3 class="title">Shopping Cart</h3>
@@ -66,16 +65,18 @@
                                                 <tr>
                                                     <td class="col-md-3">@item.Product.Name</td>
                                                     <td class="col-md-3">@String.Format("{0:C}", item.Product.Price)</td>
-                                                    <td class="col-md-3 text-center">@item.Count</td>
+                                                    <td class="col-md-3 text-center">x[@item.Count]</td>
                                                     <td class="col-md-3 text-center">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="submit" asp-action="Increase" class="btn btn-default btn-xs" asp-route-id="@item.Id">
-                                                                <span class="fa fa-plus"></span>
-                                                            </button>
-                                                            <button type="submit" asp-action="Decrease" class="btn btn-default btn-xs" asp-route-id="@item.Id">
-                                                                <span class="fa fa-minus"></span>
-                                                            </button>
-                                                        </div>
+                                                        <form method="post">
+                                                            <div class="btn-group" role="group">
+                                                                <button type="submit" asp-action="Increase" class="btn btn-default btn-xs" asp-route-id="@item.Id">
+                                                                    <span class="fa fa-plus"></span>
+                                                                </button>
+                                                                <button type="submit" asp-action="Decrease" class="btn btn-default btn-xs" asp-route-id="@item.Id">
+                                                                    <span class="fa fa-minus"></span>
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             }
@@ -83,48 +84,14 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="order-products">
-
-                                </div>
                                 <div class="order-col">
                                     <div>Shiping</div>
                                     <div><strong>FREE</strong></div>
                                 </div>
+                                <hr />
                                 <div class="order-col">
                                     <div><strong>TOTAL</strong></div>
-                                    <div><strong class="order-total">@String.Format("{0:C}", @Model.Order.Total)</strong></div>
-                                </div>
-                            </div>
-                            <div class="payment-method">
-                                <div class="input-radio">
-                                    <input type="radio" name="payment" id="payment-1">
-                                    <label for="payment-1">
-                                        <span></span>
-                                        Direct Bank Transfer
-                                    </label>
-                                    <div class="caption">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                    </div>
-                                </div>
-                                <div class="input-radio">
-                                    <input type="radio" name="payment" id="payment-2">
-                                    <label for="payment-2">
-                                        <span></span>
-                                        Cheque Payment
-                                    </label>
-                                    <div class="caption">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                    </div>
-                                </div>
-                                <div class="input-radio">
-                                    <input type="radio" name="payment" id="payment-3">
-                                    <label for="payment-3">
-                                        <span></span>
-                                        Paypal System
-                                    </label>
-                                    <div class="caption">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                    </div>
+                                    <input id="order" readonly class="input" asp-for="@Model.Order.Total" />
                                 </div>
                             </div>
                             <div class="input-checkbox">
@@ -137,14 +104,29 @@
                             <a href="#" class="primary-btn order-submit">Place order</a>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="section-title">
+                            <h3 class="title">Coupon Code</h3>
+                        </div>
+                        <div class="form-group">
+                            <input class="input" id="coupon" asp-for="@Model.Order.CouponCode">
+                        </div>
+                        <div class="form-group">
+                            <button id="applyButton" class="primary-btn btn-block">Apply</button>
+                        </div>
+                        <div class="form-group">
+                            <a asp-action="Index" asp-controller="Cart" id="removeCoupon" style="display:none;" class="primary-btn btn-block">Remove</a>
+                        </div>
+                    </div>
                 }
                 else
                 {
-                    <div class="alert alert-info" role="alert">
-                        There are not any products in your shopping cart.
+                    <div class="col-md-12">
+                        <div class="alert alert-info" role="alert">
+                            There are not any products in your shopping cart.
+                        </div>
                     </div>
                 }
-            </form>
         </div>
         <!-- /row -->
     </div>
@@ -186,3 +168,31 @@
     <!-- /container -->
 </div>
 <!-- /NEWSLETTER -->
+
+@section Scripts {
+    <script>
+        $('#applyButton').click(function () {
+            var couponCode = document.getElementById("coupon").value;
+            var orderTotal = document.getElementById("order").value;
+
+            $.ajax({
+                url: '/API/Coupons?total=' + orderTotal + '&coupon=' + couponCode,
+                type: 'GET',
+                dataType: 'text',
+                success: function (data, textStatus, xhr) {
+                    var splitData = data.split(":");
+
+                    if (splitData[1] == 'E') {
+                        alert("Coupons is either invalid or does not meet the criteria.");
+                    }
+                    else {
+                        $('#order').attr('value', Math.round(splitData[0] * 100) / 100);
+                        document.getElementById('coupon').readOnly = true;
+                        document.getElementById('applyButton').style.display = 'none';
+                        document.getElementById('removeCoupon').style.display = '';
+                    }
+                }
+            })
+        });
+    </script>
+}

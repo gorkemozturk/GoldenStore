@@ -39,12 +39,12 @@ namespace GoldenStore.Controllers
             if (cart != null)
             {
                 OrderViewModel.ShoppingCart = _shoppingCart.ListWithUser(claim.Value);
-            }
 
-            foreach (var item in OrderViewModel.ShoppingCart)
-            {
-                item.Product = _product.Find(item.ProductId);
-                OrderViewModel.Order.Total = OrderViewModel.Order.Total + (item.Product.Price * item.Count);
+                foreach (var item in OrderViewModel.ShoppingCart)
+                {
+                    item.Product = _product.Find(item.ProductId);
+                    OrderViewModel.Order.Total = OrderViewModel.Order.Total + (item.Product.Price * item.Count);
+                }
             }
 
             return View(OrderViewModel);
