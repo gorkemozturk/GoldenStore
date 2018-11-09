@@ -1,0 +1,147 @@
+﻿@model GoldenStore.Models.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Order";
+}
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb-tree">
+                    <li><a asp-action="Index" asp-controller="Home">Home</a></li>
+                    <li><a>Order</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="order-details">
+                    <div class="section-title text-center">
+                        <h3 class="title">Your Order</h3>
+                    </div>
+                    <div class="order-summary">
+                        <div class="order-col">
+                            <div><strong>PRODUCT</strong></div>
+                            <div><strong>PRICE</strong></div>
+                        </div>
+                        <div class="order-products">
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                <div class="order-col">
+                                    <div>@item.Count x @item.Product.Name</div>
+                                    <div>@String.Format("{0:C}", item.Price)</div>
+                                </div>
+                            }
+                        </div>
+                        <hr />
+                        <div class="order-col">
+                            <div>Status</div>
+                            <div>@Model.Order.Status</div>
+                        </div>
+                        <div class="order-col">
+                            <div>@Html.DisplayNameFor(m => m.Order.CreatedAt)</div>
+                            <div>@Model.Order.CreatedAt</div>
+                        </div>
+                        <div class="order-col">
+                            <div><strong>TOTAL</strong></div>
+                            <div><strong class="order-total">@String.Format("{0:C}", Model.Order.Total)</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="newsletter">
+                    <p>Sign Up for the <strong>NEWSLETTER</strong></p>
+                    <form>
+                        <input class="input" type="email" placeholder="Enter Your Email">
+                        <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+                    </form>
+                    <ul class="newsletter-follow">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /NEWSLETTER -->
+
+@section Scripts {
+    <script>
+        $('#applyButton').click(function () {
+            var coupon = document.getElementById("coupon").value;
+            var total = document.getElementById("order").value;
+
+            $.ajax({
+                url: '/API/Coupons?total=' + total + '&coupon=' + coupon,
+                type: 'GET',
+                dataType: 'text',
+                success: function (data, textStatus, xhr) {
+                    var splitData = data.split(":");
+
+                    if (splitData[1] == 'E') {
+                        alert("Coupons is either invalid or does not meet the criteria.");
+                    }
+                    else {
+                        $('#order').attr('value', Math.round(splitData[0] * 100) / 10000);
+                        document.getElementById('coupon').readOnly = true;
+                        document.getElementById('applyButton').style.display = 'none';
+                        document.getElementById('removeCoupon').style.display = '';
+                    }
+                }
+            })
+        });
+    </script>
+}

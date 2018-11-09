@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace GoldenStore.Models.ViewModels
 {
-    public class OrderViewModel
+    public class CartViewModel
     {
+        public List<ShoppingCart> ShoppingCart { get; set; }
         public Order Order { get; set; }
-        public List<OrderDetail> OrderDetails { get; set; }
     }
 }

@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using GoldenStore.Interfaces;
 using GoldenStore.Models;
 using GoldenStore.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoldenStore.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IOrderRepository _order;
@@ -19,7 +21,7 @@ namespace GoldenStore.Controllers
         private readonly IProductRepository _product;
 
         [BindProperty]
-        public OrderViewModel OrderViewModel { get; set; }
+        public CartViewModel CartViewModel { get; set; }
 
         public OrderController(IOrderRepository order, IOrderDetailRepository orderDetail, IShoppingCartRepository shoppingCart, IProductRepository product)
         {
@@ -36,17 +38,17 @@ namespace GoldenStore.Controllers
             var identity = (ClaimsIdentity)this.User.Identity;
             var claim = identity.FindFirst(ClaimTypes.NameIdentifier);
 
-            OrderViewModel.ShoppingCart = _shoppingCart.ListWithUser(claim.Value);
+            CartViewModel.ShoppingCart = _shoppingCart.ListWithUser(claim.Value);
 
-            OrderViewModel.Order.ApplicationUserId = claim.Value;
-            OrderViewModel.Order.CreatedAt = DateTime.Now;
-            OrderViewModel.Order.UpdatedAt = DateTime.Now;
-            OrderViewModel.Order.Status = "Pending";
-            Order order = OrderViewModel.Order;
+            CartViewModel.Order.ApplicationUserId = claim.Value;
+            CartViewModel.Order.CreatedAt = DateTime.Now;
+            CartViewModel.Order.UpdatedAt = DateTime.Now;
+            CartViewModel.Order.Status = "Pending";
+            Order order = CartViewModel.Order;
 
             _order.Create(order);
 
-            foreach (var item in OrderViewModel.ShoppingCart)
+            foreach (var item in CartViewModel.ShoppingCart)
             {
                 item.Product = _product.Find(item.ProductId);
                 OrderDetail orderDetail = new OrderDetail()
@@ -59,11 +61,25 @@ namespace GoldenStore.Controllers
                 _orderDetail.Add(orderDetail);
             }
 
-            _shoppingCart.RemoveCart(OrderViewModel.ShoppingCart);
+            _shoppingCart.RemoveCart(CartViewModel.ShoppingCart);
             _shoppingCart.Save();
             HttpContext.Session.SetInt32("Counter", 0);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Show), new { id = order.Id });
+        }
+
+        public IActionResult Show(int id)
+        {
+            var identity = (ClaimsIdentity)this.User.Identity;
+            var claim = identity.FindFirst(ClaimTypes.NameIdentifier);
+
+            OrderViewModel orderViewModel = new OrderViewModel()
+            {
+                Order = _order.Find(o => o.Id == id && o.ApplicationUserId == claim.Value),
+                OrderDetails = _orderDetail.ListWithOrder(id)
+            };
+
+            return View(orderViewModel);
         }
     }
 }

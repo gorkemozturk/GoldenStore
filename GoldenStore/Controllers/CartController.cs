@@ -11,13 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GoldenStore.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IShoppingCartRepository _shoppingCart;
         private readonly IProductRepository _product;
 
         [BindProperty]
-        public OrderViewModel OrderViewModel { get; set; }
+        public CartViewModel CartViewModel { get; set; }
 
         public CartController(IShoppingCartRepository shoppingCart, IProductRepository product)
         {
@@ -25,31 +26,30 @@ namespace GoldenStore.Controllers
             _product = product;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
-            OrderViewModel = new OrderViewModel()
+            CartViewModel = new CartViewModel()
             {
                 Order = new Models.Order()
             };
 
-            OrderViewModel.Order.Total = 0;
+            CartViewModel.Order.Total = 0;
             var identity = (ClaimsIdentity)this.User.Identity;
             var claim = identity.FindFirst(ClaimTypes.NameIdentifier);
             var cart = _shoppingCart.Find(c => c.ApplicationUserId == claim.Value);
 
             if (cart != null)
             {
-                OrderViewModel.ShoppingCart = _shoppingCart.ListWithUser(claim.Value);
+                CartViewModel.ShoppingCart = _shoppingCart.ListWithUser(claim.Value);
 
-                foreach (var item in OrderViewModel.ShoppingCart)
+                foreach (var item in CartViewModel.ShoppingCart)
                 {
                     item.Product = _product.Find(item.ProductId);
-                    OrderViewModel.Order.Total = OrderViewModel.Order.Total + (item.Product.Price * item.Count);
+                    CartViewModel.Order.Total = CartViewModel.Order.Total + (item.Product.Price * item.Count);
                 }
             }
 
-            return View(OrderViewModel);
+            return View(CartViewModel);
         }
 
         public IActionResult Increase(int id)
