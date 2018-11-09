@@ -4,14 +4,16 @@ using GoldenStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoldenStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181109135650_ConvertDecimalTypeAsADouble")]
+    partial class ConvertDecimalTypeAsADouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,7 +88,7 @@ namespace GoldenStore.Data.Migrations
 
                     b.Property<string>("Status");
 
-                    b.Property<decimal>("Total");
+                    b.Property<double>("Total");
 
                     b.Property<DateTime>("UpdatedAt");
 
@@ -107,7 +109,7 @@ namespace GoldenStore.Data.Migrations
 
                     b.Property<int>("OrderId");
 
-                    b.Property<decimal>("Price");
+                    b.Property<double>("Price");
 
                     b.Property<int>("ProductId");
 
@@ -139,7 +141,7 @@ namespace GoldenStore.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<decimal>("Price");
+                    b.Property<double>("Price");
 
                     b.Property<DateTime>("UpdatedAt");
 

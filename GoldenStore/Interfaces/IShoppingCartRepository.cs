@@ -9,5 +9,6 @@ namespace GoldenStore.Interfaces
     public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
         List<ShoppingCart> ListWithUser(string id);
+        void RemoveCart(List<ShoppingCart> entity);
     }
 }

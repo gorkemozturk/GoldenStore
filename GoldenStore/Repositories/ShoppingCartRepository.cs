@@ -18,5 +18,10 @@ namespace GoldenStore.Repositories
         {
             return _context.Set<ShoppingCart>().Where(c => c.ApplicationUserId == id).ToList();
         }
+
+        public void RemoveCart(List<ShoppingCart> entity)
+        {
+            _context.RemoveRange(entity);
+        }
     }
 }

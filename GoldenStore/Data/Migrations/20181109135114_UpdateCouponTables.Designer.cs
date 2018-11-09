@@ -4,14 +4,16 @@ using GoldenStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GoldenStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181109135114_UpdateCouponTables")]
+    partial class UpdateCouponTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,11 +58,11 @@ namespace GoldenStore.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<double>("Discount");
+                    b.Property<decimal>("Discount");
 
                     b.Property<bool>("IsActive");
 
-                    b.Property<double>("MinimumAmount");
+                    b.Property<decimal>("MinimumAmount");
 
                     b.Property<string>("Name")
                         .IsRequired();

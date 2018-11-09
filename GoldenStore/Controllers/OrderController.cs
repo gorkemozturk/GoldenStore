@@ -4,7 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using GoldenStore.Interfaces;
+using GoldenStore.Models;
 using GoldenStore.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoldenStore.Controllers
@@ -27,32 +29,41 @@ namespace GoldenStore.Controllers
             _product = product;
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create()
         {
-            OrderViewModel = new OrderViewModel() {
-                Order = new Models.Order()
-            };
-
-            OrderViewModel.Order.Total = 0;
             var identity = (ClaimsIdentity)this.User.Identity;
             var claim = identity.FindFirst(ClaimTypes.NameIdentifier);
-            var cart = _shoppingCart.Find(c => c.ApplicationUserId == claim.Value);
 
-            if (cart != null)
-            {
-                OrderViewModel.ShoppingCart = _shoppingCart.ListWithUser(claim.Value);
-            }
+            OrderViewModel.ShoppingCart = _shoppingCart.ListWithUser(claim.Value);
+
+            OrderViewModel.Order.ApplicationUserId = claim.Value;
+            OrderViewModel.Order.CreatedAt = DateTime.Now;
+            OrderViewModel.Order.UpdatedAt = DateTime.Now;
+            OrderViewModel.Order.Status = "Pending";
+            Order order = OrderViewModel.Order;
+
+            _order.Create(order);
 
             foreach (var item in OrderViewModel.ShoppingCart)
             {
                 item.Product = _product.Find(item.ProductId);
-                OrderViewModel.Order.Total = OrderViewModel.Order.Total + (item.Product.Price * item.Count);
+                OrderDetail orderDetail = new OrderDetail()
+                {
+                    ProductId = item.ProductId,
+                    OrderId = order.Id,
+                    Price = item.Product.Price,
+                    Count = item.Count
+                };
+                _orderDetail.Add(orderDetail);
             }
 
-            OrderViewModel.Order.CreatedAt = DateTime.Now;
-            OrderViewModel.Order.UpdatedAt = DateTime.Now;
+            _shoppingCart.RemoveCart(OrderViewModel.ShoppingCart);
+            _shoppingCart.Save();
+            HttpContext.Session.SetInt32("Counter", 0);
 
-            return View(OrderViewModel);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

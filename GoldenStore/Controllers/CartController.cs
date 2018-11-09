@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using GoldenStore.Interfaces;
 using GoldenStore.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,7 @@ namespace GoldenStore.Controllers
             _product = product;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             OrderViewModel = new OrderViewModel()
