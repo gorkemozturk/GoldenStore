@@ -1,0 +1,69 @@
+﻿@model GoldenStore.Models.ViewModels.OrderViewModel
+
+<div style="height: 90%" class="order-details">
+    <div class="section-title text-center">
+        <h3 class="title">ORDER ID: #@Model.Order.Id</h3>
+    </div>
+    <div class="order-summary">
+        <div class="order-col">
+            @if (Model.Order.Status == "Pending")
+            {
+                <form method="post">
+                    <button type="submit" asp-action="Confirm" asp-route-id="@Model.Order.Id" style="margin-right: .5em" class="primary-btn btn-sm">
+                        <i class="fa fa-check"></i>
+                        Confirm
+                    </button>
+                    <button asp-action="Reject" asp-route-id="@Model.Order.Id" style="background: #8D99AE" class="primary-btn btn-sm">
+                        <i class="fa fa-ban"></i>
+                        Reject
+                    </button>
+                </form>
+            }
+        </div>
+        @if (Model.Order.Status == "Pending")
+        {
+            <hr />
+        }
+        <div class="order-col">
+            <div><strong>PRODUCT</strong></div>
+            <div><strong>PRICE</strong></div>
+        </div>
+        <div class="order-products">
+            @foreach (var item in Model.OrderDetails)
+            {
+                <div class="order-col">
+                    <div>@item.Count x @item.Product.Name</div>
+                    <div>@String.Format("{0:C}", item.Price)</div>
+                </div>
+            }
+        </div>
+        <hr />
+        <div class="order-col">
+            <div>Status</div>
+            <div>
+                @if (Model.Order.Status == "Pending")
+                {
+                    <span class="label label-default">PENDING</span>
+                }
+                @if (Model.Order.Status == "Confirmed")
+                {
+                    <span class="label label-success">CONFIRMED</span>
+                }
+
+                @if (Model.Order.Status == "Rejected")
+                {
+                    <span class="label label-danger">REJECTED</span>
+                }
+            </div>
+        </div>
+        <div class="order-col">
+            <div>@Html.DisplayNameFor(m => m.Order.CreatedAt)</div>
+            <div>@Model.Order.CreatedAt</div>
+        </div>
+        <div class="order-col">
+            <div><strong>TOTAL</strong></div>
+            <div><strong class="order-total">@String.Format("{0:C}", Model.Order.Total)</strong></div>
+        </div>
+    </div>
+</div>
+

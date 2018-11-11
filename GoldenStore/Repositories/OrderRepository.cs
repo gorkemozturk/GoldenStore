@@ -15,6 +15,11 @@ namespace GoldenStore.Repositories
         {
         }
 
+        public List<Order> ListOrders()
+        {
+            return _context.Set<Order>().OrderByDescending(o => o.CreatedAt).ToList();
+        }
+
         public List<Order> ListRelatedWithUser(string id)
         {
             return _context.Set<Order>().Where(o => o.ApplicationUserId == id).OrderByDescending(o => o.CreatedAt).ToList();

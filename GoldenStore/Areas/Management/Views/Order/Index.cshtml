@@ -1,0 +1,69 @@
+﻿@model List<GoldenStore.Models.ViewModels.OrderViewModel>
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <partial name="_ManagementMenuPartial" />
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Orders</h3>
+                <ul class="breadcrumb-tree">
+                    <li><a href="#">Home</a></li>
+                    <li class="active"><a asp-action="Index">Orders</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div style="display: flex; flex-wrap: wrap" class="row">
+            @if (Model.Count > 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-6">
+                        <partial name="_ManagementOrderPartial" model="item" />
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <div class="alert alert-info" role="alert">
+                        There are no any values to show here.
+                    </div>
+                </div>
+
+            }
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
