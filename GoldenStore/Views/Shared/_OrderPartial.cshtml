@@ -1,0 +1,35 @@
+﻿@model GoldenStore.Models.ViewModels.OrderViewModel
+
+<div class="order-details">
+    <div class="section-title text-center">
+        <h3 class="title">ORDER ID: #@Model.Order.Id</h3>
+    </div>
+    <div class="order-summary">
+        <div class="order-col">
+            <div><strong>PRODUCT</strong></div>
+            <div><strong>PRICE</strong></div>
+        </div>
+        <div class="order-products">
+            @foreach (var item in Model.OrderDetails)
+            {
+                <div class="order-col">
+                    <div>@item.Count x @item.Product.Name</div>
+                    <div>@String.Format("{0:C}", item.Price)</div>
+                </div>
+            }
+        </div>
+        <hr />
+        <div class="order-col">
+            <div>Status</div>
+            <div>@Model.Order.Status</div>
+        </div>
+        <div class="order-col">
+            <div>@Html.DisplayNameFor(m => m.Order.CreatedAt)</div>
+            <div>@Model.Order.CreatedAt</div>
+        </div>
+        <div class="order-col">
+            <div><strong>TOTAL</strong></div>
+            <div><strong class="order-total">@String.Format("{0:C}", Model.Order.Total)</strong></div>
+        </div>
+    </div>
+</div>

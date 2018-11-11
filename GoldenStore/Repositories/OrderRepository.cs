@@ -1,6 +1,7 @@
 ﻿using GoldenStore.Data;
 using GoldenStore.Interfaces;
 using GoldenStore.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,11 @@ namespace GoldenStore.Repositories
     {
         public OrderRepository(ApplicationDbContext context) : base(context)
         {
+        }
+
+        public List<Order> ListRelatedWithUser(string id)
+        {
+            return _context.Set<Order>().Where(o => o.ApplicationUserId == id).OrderByDescending(o => o.CreatedAt).ToList();
         }
     }
 }

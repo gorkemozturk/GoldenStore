@@ -81,5 +81,24 @@ namespace GoldenStore.Controllers
 
             return View(orderViewModel);
         }
+
+        public IActionResult List()
+        {
+            var identity = (ClaimsIdentity)this.User.Identity;
+            var claim = identity.FindFirst(ClaimTypes.NameIdentifier);
+
+            List<OrderViewModel> orderViewModel = new List<OrderViewModel>();
+            List<Order> orders = _order.ListRelatedWithUser(claim.Value);
+
+            foreach (var item in orders)
+            {
+                OrderViewModel ovm = new OrderViewModel();
+                ovm.Order = item;
+                ovm.OrderDetails = _orderDetail.ListWithOrder(item.Id);
+                orderViewModel.Add(ovm);
+            }
+
+            return View(orderViewModel);
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace GoldenStore.Interfaces
 {
     public interface IOrderRepository : IRepository<Order>
     {
+        List<Order> ListRelatedWithUser(string id);
     }
 }
