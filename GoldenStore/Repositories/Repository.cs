@@ -63,5 +63,10 @@ namespace GoldenStore.Repositories
         {
             return _context.Set<T>().Where(predicate).ToList().Count();
         }
+
+        public List<T> List(Func<T, bool> predicate)
+        {
+            return _context.Set<T>().Where(predicate).ToList();
+        }
     }
 }

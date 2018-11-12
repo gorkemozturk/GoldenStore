@@ -10,6 +10,7 @@
         <!-- responsive-nav -->
         <div id="responsive-nav">
             <!-- NAV -->
+            <partial name="_MainMenuPartial" />
             <!-- /NAV -->
         </div>
         <!-- /responsive-nav -->
@@ -41,79 +42,79 @@
     <div class="container">
         <!-- row -->
         <div class="row">
-                @if (Model.ShoppingCart != null)
-                {
-                    <div class="col-md-6">
-                        <div class="order-details">
-                            <div class="section-title text-center">
-                                <h3 class="title">Shopping Cart</h3>
-                            </div>
-                            <div class="order-summary">
-                                <div class="order-col">
-                                    <table class="table">
-                                        <thead>
+            @if (Model.ShoppingCart != null)
+            {
+                <div class="col-md-6">
+                    <div class="order-details">
+                        <div class="section-title text-center">
+                            <h3 class="title">Shopping Cart</h3>
+                        </div>
+                        <div class="order-summary">
+                            <div class="order-col">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-3">PRODUCT</th>
+                                            <th class="col-md-3">PRICE</th>
+                                            <th class="col-md-3 text-center">COUNT</th>
+                                            <th class="col-md-3 text-center">ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.ShoppingCart)
+                                        {
                                             <tr>
-                                                <th class="col-md-3">PRODUCT</th>
-                                                <th class="col-md-3">PRICE</th>
-                                                <th class="col-md-3 text-center">COUNT</th>
-                                                <th class="col-md-3 text-center">ACTION</th>
+                                                <td class="col-md-3">@item.Product.Name</td>
+                                                <td class="col-md-3">@String.Format("{0:C}", item.Product.Price)</td>
+                                                <td class="col-md-3 text-center">x[@item.Count]</td>
+                                                <td class="col-md-3 text-center">
+                                                    <form method="post">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="submit" asp-action="Increase" class="btn btn-default btn-xs" asp-route-id="@item.Id">
+                                                                <span class="fa fa-plus"></span>
+                                                            </button>
+                                                            <button type="submit" asp-action="Decrease" class="btn btn-default btn-xs" asp-route-id="@item.Id">
+                                                                <span class="fa fa-minus"></span>
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.ShoppingCart)
-                                            {
-                                                <tr>
-                                                    <td class="col-md-3">@item.Product.Name</td>
-                                                    <td class="col-md-3">@String.Format("{0:C}", item.Product.Price)</td>
-                                                    <td class="col-md-3 text-center">x[@item.Count]</td>
-                                                    <td class="col-md-3 text-center">
-                                                        <form method="post">
-                                                            <div class="btn-group" role="group">
-                                                                <button type="submit" asp-action="Increase" class="btn btn-default btn-xs" asp-route-id="@item.Id">
-                                                                    <span class="fa fa-plus"></span>
-                                                                </button>
-                                                                <button type="submit" asp-action="Decrease" class="btn btn-default btn-xs" asp-route-id="@item.Id">
-                                                                    <span class="fa fa-minus"></span>
-                                                                </button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <form asp-controller="Order" asp-action="Create">
+                            <div class="form-group">
+                                <label class="control-label" style="text-transform: uppercase" asp-for="Order.Total"></label>
+                                <input id="order" readonly class="input" asp-for="@Model.Order.Total" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" style="text-transform: uppercase" asp-for="Order.CouponCode"></label>
+                                <div class="input-group">
+                                    <input class="form-control" id="coupon" asp-for="@Model.Order.CouponCode">
+                                    <span class="input-group-btn">
+                                        <a id="applyButton" class="btn btn-default btn-block">Apply</a>
+                                        <a asp-action="Index" asp-controller="Cart" id="removeCoupon" style="display:none;" class="btn btn-default">Remove</a>
+                                    </span>
                                 </div>
                             </div>
-                            <form asp-controller="Order" asp-action="Create">
-                                <div class="form-group">
-                                    <label class="control-label" style="text-transform: uppercase" asp-for="Order.Total"></label>
-                                    <input id="order" readonly class="input" asp-for="@Model.Order.Total" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label" style="text-transform: uppercase" asp-for="Order.CouponCode"></label>
-                                    <div class="input-group">
-                                        <input class="form-control" id="coupon" asp-for="@Model.Order.CouponCode">
-                                        <span class="input-group-btn">
-                                            <a id="applyButton" class="btn btn-default btn-block">Apply</a>
-                                            <a asp-action="Index" asp-controller="Cart" id="removeCoupon" style="display:none;" class="btn btn-default">Remove</a>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button class="primary-btn btn-block">Place order</button>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="form-group">
+                                <button class="primary-btn btn-block">Place order</button>
+                            </div>
+                        </form>
                     </div>
-                }
-                else
-                {
-                    <div class="col-md-12">
-                        <div class="alert alert-info" role="alert">
-                            There are not any products in your shopping cart.
-                        </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <div class="alert alert-info" role="alert">
+                        There are not any products in your shopping cart.
                     </div>
-                }
+                </div>
+            }
         </div>
         <!-- /row -->
     </div>

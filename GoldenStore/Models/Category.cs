@@ -37,5 +37,7 @@ namespace GoldenStore.Models
 
         [ForeignKey("ParentId")]
         public virtual Category Parent { get; set; }
+
+        public virtual IEnumerable<Category> Children { get; set; }
     }
 }

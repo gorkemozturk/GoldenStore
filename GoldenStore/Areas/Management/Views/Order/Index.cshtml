@@ -42,6 +42,48 @@
     <!-- container -->
     <div class="container">
         <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post">
+                    <div class="order-details">
+                        <div class="section-title">
+                            <h3 class="title">Search Order</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>ORDER ID</label>
+                                    @Html.Editor("order", new { htmlAttributes = new { @class = "input" } })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>E-MAIL</label> 
+                                    <div>
+                                        @Html.Editor("email", new { htmlAttributes = new { @id = "email", @class = "input" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>USER</label>
+                                    @Html.Editor("username", new { htmlAttributes = new { @class = "input" } })
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-right">
+                                <div class="form-group">
+                                    <button class="primary-btn" type="submit">
+                                        <i class="fa fa-search"></i>
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br />
         <div style="display: flex; flex-wrap: wrap" class="row">
             @if (Model.Count > 0)
             {
@@ -67,3 +109,26 @@
     <!-- /container -->
 </div>
 <!-- /SECTION -->
+
+
+@section Scripts {
+    <script src="~/js/typeahead.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var email = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/API/Users?type=email&query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#email').typeahead({ highlight: true, minLength: 3 }, {
+                display: 'email',
+                source: email
+            });
+        });
+    </script>
+}

@@ -17,24 +17,73 @@ namespace GoldenStore.Areas.Management.Controllers
     {
         private readonly IOrderRepository _order;
         private readonly IOrderDetailRepository _orderDetail;
+        private readonly IApplicationUserRepository _user;
 
-        public OrderController(IOrderRepository order, IOrderDetailRepository orderDetail)
+        public OrderController(IOrderRepository order, IOrderDetailRepository orderDetail, IApplicationUserRepository user)
         {
             _order = order;
             _orderDetail = orderDetail;
+            _user = user;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string email = null, string username = null, string order = null)
         {
             List<OrderViewModel> orderViewModel = new List<OrderViewModel>();
-            List<Order> orders = _order.ListOrders();
 
-            foreach (var item in orders)
+            if (email != null || username != null || order != null)
             {
-                OrderViewModel ovm = new OrderViewModel();
-                ovm.Order = item;
-                ovm.OrderDetails = _orderDetail.ListWithOrder(item.Id);
-                orderViewModel.Add(ovm);
+                var user = new ApplicationUser();
+                List<Order> orders = new List<Order>();
+
+                if (order != null)
+                {
+                    orders = _order.List(o => o.Id == Convert.ToInt32(order));
+                }
+                else
+                {
+                    if (email != null)
+                    {
+                        user = _user.Find(u => u.Email.ToLower().Contains(email.ToLower()));
+                    }
+                    else
+                    {
+                        if (username != null)
+                        {
+                            user = _user.Find(u => u.FirstName.ToLower().Contains(username.ToLower()));
+                        }
+                    }
+                }
+                if (user != null || orders.Count > 0)
+                {
+                    if (orders.Count == 0)
+                    {
+                        orders = _order.ListRelatedWithUser(user.Id);
+                    }
+
+                    foreach (Order item in orders)
+                    {
+                        OrderViewModel ovm = new OrderViewModel
+                        {
+                            Order = item,
+                            OrderDetails = _orderDetail.ListWithOrder(item.Id)
+                        };
+                        orderViewModel.Add(ovm);
+                    }
+                }
+            }
+            else
+            {
+                List<Order> orders = _order.ListOrders();
+
+                foreach (var item in orders)
+                {
+                    OrderViewModel ovm = new OrderViewModel
+                    {
+                        Order = item,
+                        OrderDetails = _orderDetail.ListWithOrder(item.Id)
+                    };
+                    orderViewModel.Add(ovm);
+                }
             }
 
             return View(orderViewModel);

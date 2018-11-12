@@ -39,20 +39,33 @@
         </div>
         <hr />
         <div class="order-col">
+            <div>User</div>
+            <div>@Model.Order.ApplicationUser.FirstName</div>
+        </div>
+        <div class="order-col">
             <div>Status</div>
             <div>
                 @if (Model.Order.Status == "Pending")
                 {
-                    <span class="label label-default">PENDING</span>
+                    <span class="label label-default">
+                        <i class="fa fa-clock-o"></i>
+                        PENDING
+                    </span>
                 }
                 @if (Model.Order.Status == "Confirmed")
                 {
-                    <span class="label label-success">CONFIRMED</span>
+                    <span class="label label-success">
+                        <i class="fa fa-check"></i>
+                        CONFIRMED
+                    </span>
                 }
 
                 @if (Model.Order.Status == "Rejected")
                 {
-                    <span class="label label-danger">REJECTED</span>
+                    <span class="label label-danger">
+                        <i class="fa fa-ban"></i>
+                        REJECTED
+                    </span>
                 }
             </div>
         </div>
@@ -62,7 +75,7 @@
         </div>
         <div class="order-col">
             <div><strong>TOTAL</strong></div>
-            <div><strong class="order-total">@String.Format("{0:C}", Model.Order.Total)</strong></div>
+            <div style="width: auto"><strong class="order-total">@String.Format("{0:C}", Model.Order.Total)</strong></div>
         </div>
     </div>
 </div>

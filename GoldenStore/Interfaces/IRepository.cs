@@ -6,6 +6,7 @@ namespace GoldenStore.Interfaces
     public interface IRepository<T> where T : class
     {
         IEnumerable<T> List();
+        List<T> List(Func<T, bool> predicate);
         T Find(int? id);
         T Find(Func<T, bool> predicate);
         void Create(T entity);
